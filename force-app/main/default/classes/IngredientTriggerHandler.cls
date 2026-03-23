@@ -4,8 +4,8 @@ public with sharing class IngredientTriggerHandler {
     }
 
     public static void afterInsert(List<Ingredient__c> newList) {
-        checkForAllergens(newList);
-        flagChangesOnNonDraftRecipes(newList);
+        checkForAllergens(newList); //updates recipes
+        flagChangesOnNonDraftRecipes(newList); //updates recipes
     }
 
     public static void afterUpdate(
@@ -79,9 +79,7 @@ public with sharing class IngredientTriggerHandler {
     }
 
     // Update parent as needs review if the recipe is not in draft mode and ingredients are being added, removed or substantially changed
-    private static void flagChangesOnNonDraftRecipes(
-        List<Ingredient__c> ingredientsList
-    ) {
+    private static void flagChangesOnNonDraftRecipes(List<Ingredient__c> ingredientsList) {
         // get a list of the non-review recipes, if any, with ingredients being added
         List<ID> recipeIds = new List<ID>();
 
@@ -100,7 +98,6 @@ public with sharing class IngredientTriggerHandler {
 
         // List to hold Recipes that need updating
         List<Recipe__c> recipesToUpdate = new List<Recipe__c>();
-        // Map < ID, Account > accountMap = new Map < ID, Account >([SELECT ID, Name, AnnualRevenue FROM Account WHERE AnnualRevenue > 1000000]);
         for (Ingredient__c i : ingredientsList) {
             Recipe__c parentRecipe = nonDraftRecipes.get(i.Recipe__c); // If the recipe was not in the query, because it was not a draft, this will be null
             // Check that there is a parent recipe and that the recipe isn't already in the list to update
@@ -115,5 +112,45 @@ public with sharing class IngredientTriggerHandler {
 
         // Lastly update the recipes
         update recipesToUpdate;
+    }
+
+     // Update parent as needs review if the recipe is not in draft mode and ingredients are being added, removed or substantially changed
+     private static void flagChangesOnNonDraftRecipes2(List<Ingredient__c> ingredientsList) {
+        // get a list of the non-review recipes, if any, with ingredients being added
+        List<ID> recipeIds = new List<ID>();
+        for (Ingredient__c i : ingredientsList) {
+            recipeIds.add(i.Recipe__c);
+        }
+
+        // List to hold Recipes that need updating
+        List<Recipe__c> recipesToUpdate = new List<Recipe__c>();
+
+        //SOQL for-loop to find and update non-draft recipes
+        for (Recipe__c recipe : [SELECT ID, Needs_Review__c FROM Recipe__c WHERE ID IN :recipeIds AND Draft__c != TRUE]) {
+            recipe.Needs_Review__c = true;
+            recipesToUpdate.add(recipe);
+        }
+        
+        // Lastly update the recipes
+        update recipesToUpdate;
+    }
+
+    private static Map<String,List<Recipe__c>> getRecipesByCookbookId(){
+        Map<String,List<Recipe__c>> recipeListsByCookbookId = new Map<String,List<Recipe__c>>();
+        for(Recipe_Usage__c usage : [
+            SELECT Id, Cookbook__c, Recipe__c, Recipe__r.Servings__c, Recipe__r.Draft__c, Recipe__r.Name
+            FROM Recipe_Usage__c]){
+                if(!recipeListsByCookbookId.containsKey(usage.Cookbook__c)){
+                    recipeListsByCookbookId.put(usage.Cookbook__c, new List<Recipe__c>());
+                }
+                Recipe__c recipe = new Recipe__c();
+                recipe.Id = usage.Recipe__c;
+                recipe.Servings__c = usage.Recipe__r.Servings__c;
+                recipe.Draft__c = usage.Recipe__r.Draft__c;
+                recipe.Name = usage.Recipe__r.Name;
+                List<Recipe__c> theseRecipes =recipeListsByCookbookId.get(usage.Cookbook__c);
+                theseRecipes.add(recipe);    
+        }
+        return recipeListsByCookbookId;
     }
 }

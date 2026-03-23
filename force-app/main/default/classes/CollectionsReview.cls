@@ -9,17 +9,18 @@ public with sharing class CollectionsReview {
         listOfStrings.add('EntryC');
 
         // Great, now listOfStrings has three strings in it. Let's prove it by printing out the list size using System.debug
-        System.debug('Size of listOfStrings: ' + listOfStrings.size());
+        System.debug('🟢 Size of listOfStrings: ' + listOfStrings.size());
 
         // What's this whole .size() business?  Part of the Apex language is the built-in methods provided. We'll talk
         // more about what methods are later, but for now, know that they are bits of funtionality you can use to do
         // fun stuff like get the size of a list
+        // https://developer.salesforce.com/docs/atlas.en-us.apexref.meta/apexref/apex_methods_system_list.htm#apex_System_List_methods
 
         // Let's declare a list and add values all in the same line
         List<Integer> listOfIntegers = new List<Integer>{ 1, 2, 3 };
 
         // And to see the values in the debug log:
-        System.debug('Contents of listOfIntegers: ' + listOfIntegers);
+        System.debug('🟡 Contents of listOfIntegers: ' + listOfIntegers);
 
         // Same idea with a list of strings
         List<String> firstNames = new List<String>{
@@ -29,10 +30,10 @@ public with sharing class CollectionsReview {
             'Mary',
             'Mario'
         };
-        System.debug('Contents of firstNames ' + firstNames);
+        System.debug('🟣 Contents of firstNames ' + firstNames);
 
         // As we saw in our reading, you can refer to the value of an item in a list by using its index, or the order in which it appears in the list
-        System.debug('Value of 0 Index:' + firstNames[0]);
+        System.debug('🧿 Value of 0 Index: ' + firstNames[0]);
 
         // Let's do one together! Using System.debug, print out the value Frank by referencing its index
     }
@@ -56,14 +57,14 @@ public with sharing class CollectionsReview {
         // And if we try and add a duplicate to the list?
         // To start we have how many in the list?
         System.debug(
-            'Size of our list before trying to re-add Balkan ' +
+            '🦊 Size of our list before trying to re-add Balkan ' +
             cuisineTypes.size()
         );
 
         cuisineTypes.add('Balkan');
 
         System.debug(
-            'Size of our list after trying to re-add Balkan ' +
+            '🦊🔹 Size of our list after trying to re-add Balkan ' +
             cuisineTypes.size()
         );
 
@@ -94,11 +95,11 @@ public with sharing class CollectionsReview {
 
         // You can use .keySet() to get a Set of the keys in the map (It's a set, since the Keys are unique!)
         Set<Integer> mapKeysSet = restaurantsById.keySet();
-        System.debug('The KeySet of our Map: ' + mapKeysSet);
+        System.debug('🍊 The KeySet of our Map: ' + mapKeysSet);
 
         // Or, you can use .values() to get a list of all the values in the map (It's a list, since there may be duplicates!)
         List<String> mapValuesList = restaurantsById.values();
-        System.debug('The values in our Map: ' + mapValuesList);
+        System.debug('🍒 The values in our Map: ' + mapValuesList);
 
         // Ok, now one of the most common uses of a map is when you have a key but need to get the value. For example,
         // let's say we have a list of our ids, and need to fetch the restaurant name.
@@ -108,7 +109,7 @@ public with sharing class CollectionsReview {
         for (Integer i : idList) {
             // When we use the get method on a map, and pass in the Id, we get back the value which is associated with that Id
             String restaurantName = restaurantsById.get(i);
-            System.debug('restaurantName: ' + restaurantName);
+            System.debug('🍔 restaurantName: ' + restaurantName);
         }
     }
 }

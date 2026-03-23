@@ -7,16 +7,11 @@ public with sharing class AccountTriggerHandler {
     Map<ID, Account> oldAccountMap;
 
     // Constructor receives the accounts being processed by this trigger and assigns them to class variables
-    public AccountTriggerHandler(
-        List<Account> newAccounts,
-        Map<ID, Account> oldAccountMap
-    ) {
+    public AccountTriggerHandler(List<Account> newAccounts, Map<ID, Account> oldAccountMap) {
         this.newAccounts = newAccounts;
         this.oldAccountMap = oldAccountMap;
     }
 
-    // TODO: Remove comments below and on line 127 to activate code
-    /*
     public void handleBeforeInsert(){
         if(hasRunOnce) {
             return;
@@ -62,6 +57,19 @@ public with sharing class AccountTriggerHandler {
     private void handleNewAccountsAfterInsert() {
         Id runningUserId = UserInfo.getUserId();
 
+        List<Campaign> campaigns = [
+            SELECT ID 
+            FROM Campaign 
+            WHERE OwnerId=:runningUserId 
+            AND IsActive=true 
+            AND Type='Referral Program' 
+            LIMIT 1];
+        String campaignId;
+        if(campaigns.size() > 0) {
+            campaignId = campaigns[0].ID;
+        }
+    
+        List<Case> casesToInsert = new List<Case>();
         // Week 3 Demo: bulkify this code
         for (Account a : this.newAccounts) {
             Case c = new Case();
@@ -74,13 +82,12 @@ public with sharing class AccountTriggerHandler {
             // Check for a Campaign that should be associated with the case
             // If this user has a campaign that is active of type Referral Program and this account has a source of Partner Referral, add the campaign
             // There should be only one per business rules.... but is there any potential issue you can see with the the code below???
-            if (a.AccountSource=='Partner Referral') {
-                List<Campaign> campaigns = [SELECT ID FROM Campaign WHERE OwnerId=:runningUserId AND IsActive=true AND Type='Referral Program'];
-                c.Campaign__c = campaigns[0].ID;
+            if (a.AccountSource=='Partner Referral' && campaignId != null) {
+                c.Campaign__c = campaignId;
             }
-        
-            insert c;
+            casesToInsert.add(c);
         }
+        insert casesToInsert;
     }
 
     private void handlePriorityChangeAfterUpdate() {
@@ -124,5 +131,4 @@ public with sharing class AccountTriggerHandler {
             insert newOpportunities;
         }
     }
-    */
 }

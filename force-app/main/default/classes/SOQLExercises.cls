@@ -7,11 +7,10 @@ public with sharing class SOQLExercises {
             WHERE Amount > 1000
         ];
         System.debug(
-            'The first big opp with account info is: ' + bigOppsWithAccounts[0]
+            '🔹 The first big opp with account info is: ' + bigOppsWithAccounts[0]
         );
         System.debug(
-            'The first big opp Account Name is: ' +
-            bigOppsWithAccounts[0].Account.Name
+            '🌶 The first big opp Account Name is: ' + bigOppsWithAccounts[0].Account.Name
         );
     }
 
@@ -24,11 +23,8 @@ public with sharing class SOQLExercises {
             WHERE AnnualRevenue > 1000000
         ];
 
-        System.debug('Our Accounts with contacts are: ' + acctsWithContacts);
-        System.debug(
-            'And the Contacts on the first account are: ' +
-            acctsWithContacts[0].Contacts
-        );
+        System.debug('🟢 Our Accounts with contacts are: ' + acctsWithContacts);
+        System.debug('🟡 And the Contacts on the first account are: ' + acctsWithContacts[0].Contacts);
     }
 
     public static void funWithAggregates() {

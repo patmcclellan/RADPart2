@@ -1,0 +1,13 @@
+Oct15 VSCode Demo
+
+Finding and opening files in File explorer (SOQLexercises)  -- note tab when file has been edited and not saved
+Creating a new Apex class (use SFDX: Create Apex Class, NOT New File - this is a common mistake for beginners)
+Executing anonymous Apex
+Reading debug in the terminal output (note pulldown menu for Output tab)
+Executing SOQL
+Deploying to your org (point out the setting for auto-deploy as well as how to do it manually) Settings > auto deploy
+Running a unit test
+Color themes
+
+
+Get in the habit of querying for a List<>, even if you only want 1. Returning an empty list does not throw an error, but returning a null does.

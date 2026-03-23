@@ -1,8 +1,4 @@
-trigger IngredientTrigger on Ingredient__c(
-    before insert,
-    after insert,
-    after update
-) {
+trigger IngredientTrigger on Ingredient__c( before insert, after insert, after update ) {
     if (Trigger.isBefore) {
         if (Trigger.isInsert) {
             IngredientTriggerHandler.beforeInsert(Trigger.new);
