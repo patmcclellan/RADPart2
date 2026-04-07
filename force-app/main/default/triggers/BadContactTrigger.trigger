@@ -1,6 +1,5 @@
-public with sharing class ContactTriggerHandler {
-   
-    public static void onAfterInsert(List<Contact> newContacts) {
+trigger BadContactTrigger on Contact(after insert, before update, after update, after delete) {
+    if (Trigger.isInsert && Trigger.isAfter) {
         Integer recordCount = newContacts.size();
         // Call a utility method from another class
         EmailManager.sendMail(
@@ -8,9 +7,7 @@ public with sharing class ContactTriggerHandler {
             'RAD Sample code',
             recordCount + ' contact(s) were inserted.'
         );
-    }
-
-    public static void onAfterDelete(List<Contact> deletedContacts) {
+    } else if (Trigger.isDelete && Trigger.isAfter) {
         Integer recordCount = deletedContacts.size();
         // Call a utility method from another class
         EmailManager.sendMail(
@@ -19,5 +16,4 @@ public with sharing class ContactTriggerHandler {
             recordCount + ' contact(s) were deleted.'
         );
     }
-
 }

@@ -1,0 +1,3 @@
+SOQLExercises.childToParentRelationshipQueries();
+
+// SOQLExercises.parentToChildrenRelationshipQueries();
