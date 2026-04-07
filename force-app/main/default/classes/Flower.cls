@@ -1,3 +1,5 @@
+//demo with flowerMaker.apex
+
 public with sharing class Flower {
 	
     public integer petalCount;
